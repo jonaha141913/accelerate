@@ -21,14 +21,6 @@ import tempfile
 from copy import deepcopy
 from pathlib import Path
 
-import torch
-from parameterized import parameterized
-from torch.utils.data import DataLoader
-from transformers import AutoModel, AutoModelForCausalLM, get_scheduler
-from transformers.testing_utils import mockenv_context
-from transformers.trainer_utils import set_seed
-from transformers.utils import is_torch_bf16_available
-
 import accelerate
 from accelerate.accelerator import Accelerator
 from accelerate.state import AcceleratorState
@@ -51,6 +43,13 @@ from accelerate.utils.deepspeed import (
     DummyScheduler,
 )
 from accelerate.utils.other import patch_environment
+import torch
+from parameterized import parameterized
+from torch.utils.data import DataLoader
+from transformers import AutoModel, AutoModelForCausalLM, get_scheduler
+from transformers.testing_utils import mockenv_context
+from transformers.trainer_utils import set_seed
+from transformers.utils import is_torch_bf16_available
 
 
 set_seed(42)
