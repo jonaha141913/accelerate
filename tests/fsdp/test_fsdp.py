@@ -16,11 +16,6 @@
 import inspect
 import os
 
-import torch
-from transformers import AutoModel
-from transformers.testing_utils import mockenv_context
-from transformers.trainer_utils import set_seed
-
 import accelerate
 from accelerate.accelerator import Accelerator
 from accelerate.state import AcceleratorState
@@ -41,6 +36,10 @@ from accelerate.utils.constants import (
 )
 from accelerate.utils.dataclasses import FullyShardedDataParallelPlugin
 from accelerate.utils.other import patch_environment
+import torch
+from transformers import AutoModel
+from transformers.testing_utils import mockenv_context
+from transformers.trainer_utils import set_seed
 
 
 set_seed(42)
