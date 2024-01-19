@@ -26,6 +26,8 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
+from safetensors import safe_open
+from safetensors.torch import load_file as safe_load_file
 
 from ..state import AcceleratorState
 from .constants import SAFE_WEIGHTS_NAME, WEIGHTS_NAME
@@ -37,9 +39,6 @@ from .tqdm import is_tqdm_available, tqdm
 
 if is_npu_available(check_device=False):
     import torch_npu  # noqa: F401
-
-from safetensors import safe_open
-from safetensors.torch import load_file as safe_load_file
 
 
 WEIGHTS_INDEX_NAME = "pytorch_model.bin.index.json"
