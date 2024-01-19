@@ -1,3 +1,4 @@
+from .bnb import has_4bit_bnb_layers, load_and_quantize_model
 from .constants import (
     MODEL_NAME,
     OPTIMIZER_NAME,
@@ -37,6 +38,14 @@ from .dataclasses import (
     TensorInformation,
     TorchDynamoPlugin,
 )
+from .deepspeed import (
+    DeepSpeedEngineWrapper,
+    DeepSpeedOptimizerWrapper,
+    DeepSpeedSchedulerWrapper,
+    DummyOptim,
+    DummyScheduler,
+    HfDeepSpeedConfig,
+) if is_deepspeed_available() else None
 from .environment import (
     are_libraries_initialized,
     check_cuda_p2p_ib_support,
@@ -46,6 +55,7 @@ from .environment import (
     parse_flag_from_env,
     str_to_bool,
 )
+from .fsdp_utils import load_fsdp_model, load_fsdp_optimizer, save_fsdp_model, save_fsdp_optimizer
 from .imports import (
     get_ccl_version,
     is_4bit_bnb_available,
@@ -59,7 +69,6 @@ from .imports import (
     is_comet_ml_available,
     is_cuda_available,
     is_datasets_available,
-    is_peft_available,
     is_deepspeed_available,
     is_dvclive_available,
     is_fp8_available,
@@ -70,6 +79,7 @@ from .imports import (
     is_msamp_available,
     is_npu_available,
     is_pandas_available,
+    is_peft_available,
     is_rich_available,
     is_sagemaker_available,
     is_tensorboard_available,
@@ -80,6 +90,34 @@ from .imports import (
     is_wandb_available,
     is_xpu_available,
 )
+from .launch import (
+    PrepareForLaunch,
+    _filter_args,
+    prepare_deepspeed_cmd_env,
+    prepare_multi_gpu_env,
+    prepare_sagemager_args_inputs,
+    prepare_simple_launcher_cmd_env,
+    prepare_tpu,
+)
+from .megatron_lm import (
+    AbstractTrainStep,
+    BertTrainStep,
+    GPTTrainStep,
+    MegatronEngine,
+    MegatronLMDummyDataLoader,
+    MegatronLMDummyScheduler,
+    MegatronLMOptimizerWrapper,
+    MegatronLMSchedulerWrapper,
+    T5TrainStep,
+    avg_losses_across_data_parallel_group,
+    gather_across_data_parallel_groups,
+)
+from .megatron_lm import initialize as megatron_lm_initialize
+from .megatron_lm import prepare_data_loader as megatron_lm_prepare_data_loader
+from .megatron_lm import prepare_model as megatron_lm_prepare_model
+from .megatron_lm import prepare_optimizer as megatron_lm_prepare_optimizer
+from .megatron_lm import prepare_scheduler as megatron_lm_prepare_scheduler
+from .memory import find_executable_batch_size, release_memory
 from .modeling import (
     is_peft_model,
     calculate_maximum_sizes,
@@ -137,49 +175,6 @@ from .operations import (
     send_to_device,
     slice_tensors,
 )
-from .versions import compare_versions, is_torch_version
-
-
-if is_deepspeed_available():
-    from .deepspeed import (
-        DeepSpeedEngineWrapper,
-        DeepSpeedOptimizerWrapper,
-        DeepSpeedSchedulerWrapper,
-        DummyOptim,
-        DummyScheduler,
-        HfDeepSpeedConfig,
-    )
-
-from .bnb import has_4bit_bnb_layers, load_and_quantize_model
-from .fsdp_utils import load_fsdp_model, load_fsdp_optimizer, save_fsdp_model, save_fsdp_optimizer
-from .launch import (
-    PrepareForLaunch,
-    _filter_args,
-    prepare_deepspeed_cmd_env,
-    prepare_multi_gpu_env,
-    prepare_sagemager_args_inputs,
-    prepare_simple_launcher_cmd_env,
-    prepare_tpu,
-)
-from .megatron_lm import (
-    AbstractTrainStep,
-    BertTrainStep,
-    GPTTrainStep,
-    MegatronEngine,
-    MegatronLMDummyDataLoader,
-    MegatronLMDummyScheduler,
-    MegatronLMOptimizerWrapper,
-    MegatronLMSchedulerWrapper,
-    T5TrainStep,
-    avg_losses_across_data_parallel_group,
-    gather_across_data_parallel_groups,
-)
-from .megatron_lm import initialize as megatron_lm_initialize
-from .megatron_lm import prepare_data_loader as megatron_lm_prepare_data_loader
-from .megatron_lm import prepare_model as megatron_lm_prepare_model
-from .megatron_lm import prepare_optimizer as megatron_lm_prepare_optimizer
-from .megatron_lm import prepare_scheduler as megatron_lm_prepare_scheduler
-from .memory import find_executable_batch_size, release_memory
 from .other import (
     check_os_kernel,
     clean_state_dict_for_safetensors,
@@ -198,3 +193,4 @@ from .random import set_seed, synchronize_rng_state, synchronize_rng_states
 from .torch_xla import install_xla
 from .tqdm import tqdm
 from .transformer_engine import convert_model, has_transformer_engine_layers
+from .versions import compare_versions, is_torch_version
